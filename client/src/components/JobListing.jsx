@@ -26,7 +26,7 @@ const JobListing = () => {
     setSelectedCategories(
       (prev) =>
         prev.includes(location)
-          ? prev.filter((c) => c !== location)
+          ? prev.filter((l) => l !== location)
           : [...prev, location]
       //If the selected location is already there then we remove else it will be added.
     );
@@ -106,7 +106,7 @@ const JobListing = () => {
         <div className={showFilter ? "" : "max-lg:hidden"}>
           <h4 className="font-medium text-lg py-4">Search by Categories</h4>
           <ul className="space-y-4 text-gray-600">
-            {JobCategories.map((category, index) => {
+            {JobCategories.map((category, index) => (
               <li className="flex gap-3 items-center" key={index}>
                 <input
                   className="scale-125"
@@ -115,15 +115,15 @@ const JobListing = () => {
                   checked={selectedCategories.includes(category)}
                 />
                 {category}
-              </li>;
-            })}
+              </li>
+            ))}
           </ul>
         </div>
         {/* Location Filter */}
         <div className={showFilter ? "" : "max-lg:hidden"}>
           <h4 className="font-medium text-lg py-4 pt-14">Search by Location</h4>
           <ul className="space-y-4 text-gray-600">
-            {JobLocations.map((location, index) => {
+            {JobLocations.map((location, index) => (
               <li className="flex gap-3 items-center" key={index}>
                 <input
                   className="scale-125"
@@ -132,8 +132,8 @@ const JobListing = () => {
                   checked={selectedLocations.includes(location)}
                 />
                 {location}
-              </li>;
-            })}
+              </li>
+            ))}
           </ul>
         </div>
       </div>
