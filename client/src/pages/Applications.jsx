@@ -1,13 +1,52 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "../components/Navbar";
 import { assets, jobsApplied } from "../assets/assets";
 import moment from 'moment';
 import Footer from "../components/Footer";
+import { AppContext } from "../context/AppContext";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import axios from "axios";
 
 const Applications = () => {
 
+  const {user} = useUser();
+  const {getToken} = useAuth();
+
   const [isEdit, setIsEdit] = useState(false);
   const [resume,setResume] = useState(null);
+
+  const {backendUrl,userData,userApplications,fetchUserData} = useContext(AppContext);
+
+  const updateResume = async () => {
+
+    try {
+
+      const formData = new FormData();
+      formData.append('resume',resume);
+
+      const token = await getToken();
+
+      const {data} = await axios.post(backendUrl+'/api/users/update-resume',
+        formData,
+        {headers:{Authorization: `Bearer ${token}`}}
+      );
+
+      if(data.success){
+        toast.success(data.message);
+        await fetchUserData();
+      }
+      else{
+        toast.error(data.message);
+      }
+
+    } catch (error) {
+      toast.error(error.message);
+    }
+
+    setIsEdit(false);
+    setResume(null);
+
+  }
 
   return (
     <>
@@ -16,7 +55,7 @@ const Applications = () => {
         <h2 className="text-xl font-semibold">Your Resume</h2>
         <div className="flex gap-2 mb-6 mt-3">
           {
-          isEdit 
+          isEdit || userData && userData.resume === ""
           ? 
           <>
             <label className="flex items-center" htmlFor="resumeUpload">

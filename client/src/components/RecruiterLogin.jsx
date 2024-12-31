@@ -67,7 +67,7 @@ const RecruiterLogin = () =>
             else{
               toast.error(data.message);
             }
-
+          
           }
         } catch (error) {
           toast.error(error.message);
